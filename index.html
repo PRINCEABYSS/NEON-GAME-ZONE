@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Game Zone</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Анимированный неоновый фон -->
+    <div class="neon-background">
+        <div class="neon-grid"></div>
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+        </div>
+        <div class="particles" id="particles-js"></div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-gamepad"></i>
+                <span>NEON GAME ZONE</span>
+            </div>
+            <nav class="nav">
+                <a href="#" class="nav-link active">Главная</a>
+                <a href="#" class="nav-link">Игры</a>
+                <a href="#" class="nav-link">Топы</a>
+                <a href="#" class="nav-link">Новости</a>
+            </nav>
+            <div class="user-actions">
+                <button class="btn-neon">
+                    <i class="fas fa-user"></i>
+                    Войти
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- Герой секция -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="title-part">ИГРОВАЯ</span>
+                        <span class="title-part">ГАЛЕРЕЯ</span>
+                    </h1>
+                    <p class="hero-subtitle">Откройте мир лучших игр с неоновым стилем</p>
+                    <div class="hero-buttons">
+                        <button class="btn-primary">
+                            <i class="fas fa-play"></i>
+                            Начать игру
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-star"></i>
+                            Топ игры
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <div class="game-preview">
+                            <div class="preview-image"></div>
+                            <div class="preview-info">
+                                <h3>CYBER RUNNER</h3>
+                                <p>Новая игра 2024</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Секция игр -->
+            <section class="games-section">
+                <div class="section-header">
+                    <h2>Популярные игры</h2>
+                    <div class="filter-tabs">
+                        <button class="filter-tab active">Все</button>
+                        <button class="filter-tab">Экшен</button>
+                        <button class="filter-tab">RPG</button>
+                        <button class="filter-tab">Стратегии</button>
+                        <button class="filter-tab">Гонки</button>
+                    </div>
+                </div>
+
+                <div class="games-grid">
+                    <!-- Игры будут добавляться через JavaScript -->
+                </div>
+            </section>
+
+            <!-- Секция статистики -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" data-target="150">0</span>
+                            <span class="stat-label">Игр в каталоге</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" data-target="50000">0</span>
+                            <span class="stat-label">Активных игроков</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" data-target="2500">0</span>
+                            <span class="stat-label">Достижений</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="stat-number" data-target="24">0</span>
+                            <span class="stat-label">Часа в игре</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальное окно игры -->
+    <div id="game-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <div class="modal-body">
+                <div class="modal-game-image"></div>
+                <div class="modal-game-info">
+                    <h2 id="modal-game-title">Название игры</h2>
+                    <div class="game-meta">
+                        <span class="game-genre" id="modal-game-genre">Жанр</span>
+                        <span class="game-rating" id="modal-game-rating">
+                            <i class="fas fa-star"></i> 4.8
+                        </span>
+                    </div>
+                    <p id="modal-game-description">Описание игры...</p>
+                    <div class="game-stats">
+                        <div class="stat">
+                            <span class="stat-value" id="modal-game-players">0</span>
+                            <span class="stat-label">Игроков</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="modal-game-time">0</span>
+                            <span class="stat-label">Часов</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value" id="modal-game-level">0</span>
+                            <span class="stat-label">Уровень</span>
+                        </div>
+                    </div>
+                    <div class="modal-actions">
+                        <button class="btn-primary">
+                            <i class="fas fa-play"></i>
+                            Играть сейчас
+                        </button>
+                        <button class="btn-secondary">
+                            <i class="fas fa-heart"></i>
+                            В избранное
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
