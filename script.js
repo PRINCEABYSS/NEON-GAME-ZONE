@@ -11,6 +11,7 @@ class GameGallery {
                 players: 12500,
                 time: 156,
                 level: 85,
+                videoSrc: "Cyber runner 2077.mp4", // Исправлено: путь как строка
                 badge: "НОВАЯ"
             },
             {
@@ -22,6 +23,7 @@ class GameGallery {
                 players: 8900,
                 time: 203,
                 level: 92,
+                videoSrc: "Space odyssey.mp4",
                 badge: "ПОПУЛЯРНАЯ"
             },
             {
@@ -33,6 +35,7 @@ class GameGallery {
                 players: 15600,
                 time: 89,
                 level: 78,
+                videoSrc: "Neon Racing.mp4",
                 badge: "ХИТ"
             },
             {
@@ -44,6 +47,7 @@ class GameGallery {
                 players: 23400,
                 time: 312,
                 level: 95,
+                videoSrc: "Dragon's Legacy.mp4",
                 badge: "ЛУЧШАЯ"
             },
             {
@@ -55,6 +59,7 @@ class GameGallery {
                 players: 6700,
                 time: 145,
                 level: 82,
+                videoSrc: "Future Wars.mp4",
                 badge: "НОВАЯ"
             },
             {
@@ -66,6 +71,7 @@ class GameGallery {
                 players: 9800,
                 time: 167,
                 level: 88,
+                videoSrc: "Virtual Reality.mp4",
                 badge: "VR"
             }
         ];
@@ -82,7 +88,6 @@ class GameGallery {
     }
 
     setupEventListeners() {
-        // Фильтрация игр
         document.querySelectorAll('.filter-tab').forEach(tab => {
             tab.addEventListener('click', (e) => {
                 document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
@@ -92,19 +97,16 @@ class GameGallery {
             });
         });
 
-        // Закрытие модального окна
         document.querySelector('.close-btn').addEventListener('click', () => {
             this.closeModal();
         });
 
-        // Закрытие модального окна при клике вне его
         document.getElementById('game-modal').addEventListener('click', (e) => {
             if (e.target === document.getElementById('game-modal')) {
                 this.closeModal();
             }
         });
 
-        // Кнопки в герое
         document.querySelector('.btn-primary').addEventListener('click', () => {
             this.showNotification('Запускаем игру...', 'success');
         });
@@ -131,7 +133,6 @@ class GameGallery {
 
         container.innerHTML = filteredGames.map(game => this.createGameCard(game)).join('');
         
-        // Добавляем обработчики для карточек игр
         filteredGames.forEach(game => {
             const card = document.querySelector(`[data-game-id="${game.id}"]`);
             if (card) {
@@ -141,11 +142,10 @@ class GameGallery {
     }
 
     createGameCard(game) {
-        const stars = '★'.repeat(Math.floor(game.rating)) + '☆'.repeat(5 - Math.floor(game.rating));
-        
         return `
             <div class="game-card" data-game-id="${game.id}">
                 <div class="game-image">
+                    <video src="${game.videoSrc}" autoplay muted loop playsinline class="card-video-bg"></video>
                     <div class="game-badge">${game.badge}</div>
                 </div>
                 <div class="game-info">
@@ -180,7 +180,6 @@ class GameGallery {
         const modal = document.getElementById('game-modal');
         const modalContent = modal.querySelector('.modal-content');
         
-        // Заполняем модальное окно данными игры
         document.getElementById('modal-game-title').textContent = game.title;
         document.getElementById('modal-game-genre').textContent = game.genre;
         document.getElementById('modal-game-rating').innerHTML = `<i class="fas fa-star"></i> ${game.rating}`;
@@ -189,19 +188,14 @@ class GameGallery {
         document.getElementById('modal-game-time').textContent = game.time;
         document.getElementById('modal-game-level').textContent = game.level;
         
-        // Устанавливаем цвет фона для изображения игры
-        const modalImage = modal.querySelector('.modal-game-image');
-        const colors = [
-            'linear-gradient(45deg, #1a1a2e, #16213e)',
-            'linear-gradient(45deg, #2d1a2e, #41163e)',
-            'linear-gradient(45deg, #1a2e2a, #163e32)',
-            'linear-gradient(45deg, #2e2a1a, #3e3216)'
-        ];
-        modalImage.style.background = colors[game.id % colors.length];
+        const modalImageContainer = modal.querySelector('.modal-game-image');
+        // Заменяем фон в модалке на видео
+        modalImageContainer.innerHTML = `
+            <video src="${game.videoSrc}" autoplay muted loop playsinline 
+                   style="width:100%; height:100%; object-fit:cover;"></video>
+        `;
         
         modal.style.display = 'block';
-        
-        // Анимация появления
         modalContent.style.animation = 'none';
         setTimeout(() => {
             modalContent.style.animation = 'modalAppear 0.3s ease';
@@ -209,14 +203,17 @@ class GameGallery {
     }
 
     closeModal() {
-        document.getElementById('game-modal').style.display = 'none';
+        const modal = document.getElementById('game-modal');
+        // Очищаем видео при закрытии, чтобы не грузить систему
+        modal.querySelector('.modal-game-image').innerHTML = '';
+        modal.style.display = 'none';
     }
 
     animateStats() {
         const statNumbers = document.querySelectorAll('.stat-number');
-        
         statNumbers.forEach(stat => {
             const target = parseInt(stat.getAttribute('data-target'));
+            if (!target) return;
             const duration = 2000;
             const step = target / (duration / 16);
             let current = 0;
@@ -234,8 +231,9 @@ class GameGallery {
 
     createParticles() {
         const particlesContainer = document.getElementById('particles-js');
-        const particleCount = 50;
+        if(!particlesContainer) return;
         
+        const particleCount = 50;
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
@@ -250,37 +248,31 @@ class GameGallery {
                 animation: particleFloat ${5 + Math.random() * 10}s linear infinite;
                 opacity: ${0.3 + Math.random() * 0.7};
             `;
-            
             particlesContainer.appendChild(particle);
         }
         
-        // Добавляем стили для анимации частиц
         const style = document.createElement('style');
         style.textContent = `
             @keyframes particleFloat {
-                0% {
-                    transform: translateY(0) translateX(0);
-                    opacity: 0;
-                }
-                10% {
-                    opacity: 1;
-                }
-                90% {
-                    opacity: 1;
-                }
-                100% {
-                    transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px);
-                    opacity: 0;
-                }
+                0% { transform: translateY(0) translateX(0); opacity: 0; }
+                10% { opacity: 1; }
+                90% { opacity: 1; }
+                100% { transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px); opacity: 0; }
+            }
+            .card-video-bg {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: absolute;
+                top: 0;
+                left: 0;
             }
         `;
         document.head.appendChild(style);
     }
 
     formatNumber(num) {
-        if (num >= 1000) {
-            return (num / 1000).toFixed(1) + 'k';
-        }
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
         return num.toString();
     }
 
@@ -310,52 +302,27 @@ class GameGallery {
         `;
         
         document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            if (notification.parentElement) {
-                notification.remove();
-            }
-        }, 3000);
+        setTimeout(() => notification?.remove(), 3000);
     }
 
     scrollToGames() {
-        document.querySelector('.games-section').scrollIntoView({
-            behavior: 'smooth'
-        });
+        document.querySelector('.games-section').scrollIntoView({ behavior: 'smooth' });
     }
 }
 
-// Инициализация при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     new GameGallery();
 });
 
-// Добавляем глобальные стили для анимаций
 const globalStyles = document.createElement('style');
 globalStyles.textContent = `
     @keyframes slideInRight {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
-        }
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
     }
-    
     .notification button {
-        background: none;
-        border: none;
-        color: white;
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 0;
-        width: 20px;
-        height: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        background: none; border: none; color: white;
+        font-size: 1.2rem; cursor: pointer; display: flex;
     }
 `;
 document.head.appendChild(globalStyles);
